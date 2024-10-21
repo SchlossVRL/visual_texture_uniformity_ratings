@@ -158,34 +158,23 @@
             type: jsPsychHtmlSliderResponse,
             stimulus: `
             <div style='text-align:center; font-size:20px; line-height:25px; width: 1200px;'>
-                <br> During this experiment you will be asked to rate how uniform an image is.
-                <br><br> The image below has a highlighted shape. Imagine sliding the highlighted shape accross the image like a window.
-                <br> The more similar the visuals inside the shape appear as you move the window accross the image the more uniform the image is.
-</div>
-        <br>
-        <br>
-        <img src="output_D12.png" alt="img" style="max-width:500px">
-    </div>
-    <div style="clear: both;"></div>
-</div>
-                
-    <br> Below, you can see some more examples of the images you will be asked to rate. <br>You will be asked\
-    to rate how uniform you consider an image to be on a scale from 'not at all' to 'very much' like the
-    one below. <br><br>
-    Now, please look at the provided images. For each image, imagine a highlighted shape the same size as that provided in the example above.<br> \
-    Imagine sliding the window for that highlighted shape accross the image and make a judgement on how uniform you consider the image to be.
-    <br><br>
+                <br> During this experiment you will be presented with images of textures.
+                <br><br> Some of the textures will appear very “uniform,” which means that they appear similar across the whole image. The texture to the left is an example of a very uniform texture. 
 
-    Please think about which image you consider 'very much' \
-    uniform. When you see that image during the experiment, please rate it near the 'very much' endpoint of the
-    scale.<br>Now, please think about which image you consider 'not at all' \
-    uniform. When you see that image during the experiment, please rate it near the 'not at all' endpoint
-    of the scale.<br>
-    Please use the full range of the scale. That is, if an image is somewhat uniform, you would
-    click partway between the middle point and right side of the scale.\
-    You will be asked to rate each image on its uniformity.<br><br>Press the
-    'Continue' button for instructions on how to use the slider.\
-    <br><br>
+                <br><br> Some of the textures will appear very “non-uniform,” which means that they look different in different parts of the image. The texture to the right is an example of a very non-uniform texture. 
+
+                <br><br> During this experiment, you will see each texture one at a time. Your task is to rate how uniform the texture appears on a scale from “not at all” to “very much,” like the one below. 
+
+                Please think about which image you consider 'very much' \
+                uniform. When you see that image during the experiment, please rate it near the 'very much' endpoint of the
+                scale.<br>Now, please think about which image you consider 'not at all' \
+                uniform. When you see that image during the experiment, please rate it near the 'not at all' endpoint
+                of the scale.<br>
+                Please use the full range of the scale. That is, if an image is somewhat uniform, you would
+                click partway between the middle point and right side of the scale.\
+                You will be asked to rate each image on its uniformity.<br><br>Press the
+                'Continue' button for instructions on how to use the slider.\
+                 <br><br>
 </div>
         <br>
         <br>
@@ -340,16 +329,7 @@
 
         var block_break0 = {
             type: jsPsychHtmlButtonResponse,
-            stimulus: `<div style="width:800px;"><p style="text-align:center">In each block of trials, you will be asked to rate how uniform you consider a series of images to be.<br> Please keep the sliding window analogy in mind as you make your judgements.
-</div>
-        <br>
-        <br>
-        <img src="output_D12.png" alt="img" style="max-width:500px">
-        <br>
-        <br>
-    </div>
-    <div style="clear: both;"></div>
-</div>`,
+            stimulus: `<div style="width:800px;"><p style="text-align:center">In each block of trials, you will be asked to rate images on their uniformity one-by-one.<br> `,
             choices: ['Continue'],
         };
         timeline.push(block_break0);
