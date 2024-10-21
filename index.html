@@ -33,8 +33,10 @@
         var timeline = [];
 
 
+
         const subject_id = jsPsych.randomization.randomID(10);
         const filename = `${subject_id}.csv`;
+
 
         /* // Function to get query parameters from URL
         function getQueryStringParam(param) {
@@ -334,6 +336,16 @@
 
         var texture_order = jsPsych.randomization.sampleWithoutReplacement(_.range(Object.keys(textures).length), Object.keys(textures).length);
 
+        // Define how many trials should be in each block (3 breaks, so divide by 4)
+        var trials_per_block = Math.floor(Object.keys(textures).length / 4);
+
+        // Define break messages
+        var break_messages = [
+            "Nice job! You have completed 25% of the experiment trials. Feel free to take a quick break, then click 'Continue' when you are ready proceed to the next round. <br> Remember your task is rating the uniformity of each texture.",
+            "Nice job! You have completed 50% of the experiment trials. Feel free to take a quick break, then click 'Continue' when you are ready proceed to the next round. <br> Remember your task is rating the uniformity of each texture.",
+            "Nice job! You have completed 75% of the experiment trials. Feel free to take a quick break, then click 'Continue' when you are ready proceed to the next round. <br> Remember your task is rating the uniformity of each texture."
+        ];
+
         var block_break0 = {
             type: jsPsychHtmlButtonResponse,
             stimulus: `<div style="width:800px;"><p style="text-align:center">In the following trials, you will be asked to rate images on their uniformity one-by-one.<br> `,
@@ -372,30 +384,34 @@
             };
 
             timeline.push(rating_trial);
+
+
+            // Insert breaks at 1/4, 2/4, and 3/4 of the trials
+            if (j > 0 && (j + 1) % trials_per_block === 0 && (j + 1) < Object.keys(textures).length) {
+                var break_index = (j + 1) / trials_per_block - 1; // Break index to get the correct message
+                var break_trial = {
+                    type: jsPsychHtmlButtonResponse,
+                    stimulus: `<p>${break_messages[break_index]}<br></br></p>`,
+                    choices: ['Continue'],
+                };
+                timeline.push(break_trial);
+            }
         }
 
-        if (i == textures.length - 1) {
-            var block_break = {
-                type: jsPsychHtmlButtonResponse,
-                stimulus: "<p>Great Job! You're done rating all concepts!<br></br></p>",
-                choices: ['Next'],
-            };
-            timeline.push(block_break)
+        // Final message at the end of the experiment
+        var final_message = {
+            type: jsPsychHtmlButtonResponse,
+            stimulus: "<p>Great Job! You're done rating all textures!<br></br></p>",
+            choices: ['Next'],
+        };
 
-        } else if (i < textures.length) {
-            var block_break = {
-                type: jsPsychHtmlButtonResponse,
-                stimulus: "<p>Great Job! You've finished block " + (i + 1) + ".<br></br> You have " + (textures.length - (i + 1)) + " block(s) left to go.<br></br></p>",
-                choices: ['Next'],
-            };
-            timeline.push(block_break)
-        }
+        timeline.push(final_message);
 
 
         const save_data = {
             type: jsPsychPipe,
             action: "save",
-            experiment_id: "hRNSXYC10ErQ",
+            experiment_id: "yLSJhzw7E4El",
             filename: filename,
             data_string: () => jsPsych.data.get().csv()
         };
