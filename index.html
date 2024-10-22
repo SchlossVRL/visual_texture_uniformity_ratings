@@ -73,10 +73,11 @@
         // Initial welcome screen
         var initial_screen = {
             type: jsPsychHtmlButtonResponse,
-            stimulus: 'Welcome to our experiment!' +
-                '<p>At the bottom of this screen, you will see a button that says "Begin Experiment".' +
-                '<br>Please only click that button when you are ready to complete the 25 minute experiment in one sitting.</p>' +
-                '<p> Once you click that button, it will not be possible to restart the experiment.',
+            stimulus: `<div style='text-align:center; font-size:20px; line-height:25px; width: 1200px;'>
+                Welcome to our experiment! <br>
+                <br>At the bottom of this screen, you will see a button that says 'Begin Experiment.
+                <br>Please only click that button when you are ready to complete the 25 minute experiment in one sitting. <br>
+                <br> Once you click that button, it will not be possible to restart the experiment. <br><br>`,
             choices: ['Begin Experiment']
         }
         timeline.push(initial_screen);
@@ -146,8 +147,7 @@
             questions: [
                 { prompt: "Age", name: 'Age', rows: "1", columns: "3", required: true, },
                 { prompt: "Gender", name: 'Gender', rows: "1", columns: "15", required: true, },
-                { prompt: "Race/ethnicity", name: 'Race/ethnicity', rows: "1", columns: "30", required: true, },
-                { prompt: "List all languages you know", name: "Languages", rows: "6", columns: "60", required: true, }
+                { prompt: "Race/ethnicity", name: 'Race/ethnicity', rows: "1", columns: "30", required: true, }
             ],
             preamble: "Please answer the following questions.",
             button_label: "Done",
@@ -155,33 +155,41 @@
         }
         timeline.push(age_lang_demo);
 
-
-        var instructions = {
-            type: jsPsychHtmlSliderResponse,
-            stimulus: `
-            <div style='text-align:center; font-size:20px; line-height:24px; width: 1200px;'>
+        var uniformity = {
+            type: jsPsychHtmlButtonResponse,
+            stimulus: `<div style='text-align:left; font-size:20px; line-height:25px; width: 1200px;'>
                 During this experiment you will be presented with images of textures.
-        <div style="display: flex; align-items: center; justify-content: flex-start; padding-bottom: 0px; margin-bottom: 0px;">
-            <span style="margin-right: 10px;">Some of the textures will appear very “uniform,” which means that they appear similar across the whole image. The texture to the left is an example of a very uniform texture.</span>
+                <br>
+                <br>
+        <div style="display: flex; align-items: left; justify-content: flex-start; padding-bottom: 0px; margin-bottom: 0px;">
+            <span style="margin-right: 10px;">Some of the textures will appear very 'uniform,' which means that they appear similar across the whole image. The texture to the right is an example of a very uniform texture.</span>
             <img src="uniform_ex.png" alt="Image 1" style="max-width: 75px; margin-left: 10px; display: inline; vertical-align: middle; padding: 0; margin: 0;">
         </div>
 
         <br><br>
 
-        <div style="display: flex; align-items: center; justify-content: flex-start; padding-bottom: 0px; margin-bottom: 0px;">
-            <span style="margin-right: 10px;">Some of the textures will appear very “non-uniform,” which means that they look different in different parts of the image. The texture to the right is an example of a very non-uniform texture.</span>
+        <div style="display: flex; align-items: left; justify-content: flex-start; padding-bottom: 0px; margin-bottom: 0px;">
+            <span style="margin-right: 10px;">Some of the textures will appear very 'non-uniform,' which means that they look different in different parts of the image. The texture to the right is an example of a very non-uniform texture.</span>
             <img src="not_uniform_ex.png" alt="Image 2" style="max-width: 75px; margin-left: 10px; display: inline; vertical-align: middle; padding: 0; margin: 0;">
-        </div>
+        </div>`,
+            choices: ['Continue']
+        }
 
-                <br>During this experiment, you will see each texture one at a time. Your task is to rate how uniform the texture appears on a scale from “not at all” to “very much,” like the one below.
-                <br><br>Please think about which image you consider 'very uniform' \
-                . When you see that image during the experiment, please rate it near the 'very uniform' endpoint of the
-                scale.<br>Now, please think about which image you consider 'not at all uniform' \
-                . When you see that image during the experiment, please rate it near the 'not at all uniform' endpoint
-                of the scale.<br>
-                Please use the full range of the scale. That is, if an image is somewhat uniform, you would
+        timeline.push(uniformity);
+
+
+        var instructions = {
+            type: jsPsychHtmlSliderResponse,
+            stimulus: `
+            <div style='text-align:left; margin-left=-100px; font-size:20px; line-height:25px; width: 1200px;'>
+                <br>During this experiment, you will see a series of textures, one at a time, like the ones below. Your task is to rate how uniform the texture appears on a scale from 'not at all uniform' to 'very much uniform,' like the one below.
+                <br><br> So you know what 'very much uniform' and 'not at all uniform' means to you in the context of these textures, please think about which textures below you consider 'very much uniform,' and which textures below you consider 'not at all uniform.'
+                <br><br>When you see a texture during the experiment that you consider 'very much uniform', please rate it near the 'very much uniform' endpoint of the
+                scale.<br><br> When you see a texture during the experiment that you consider 'not at all uniform', please rate it near the 'not at all uniform' endpoint
+                of the scale.<br><br>
+                Please use the full range of the scale. That is, if an texture is somewhat uniform, you would
                 click partway between the middle point and right side of the scale.\
-                You will be asked to rate each image on its uniformity.<br><br>Press the
+                You will be asked to rate each texture on its uniformity.<br><br>Press the
                 'Continue' button for instructions on how to use the slider.\
                  <br><br>
 </div>
@@ -192,7 +200,7 @@
     <div style="clear: both;"></div>
 </div>
             `,
-            labels: ['Not at all uniform', 'Very uniform'],
+            labels: ['Not at all <br> uniform', 'Very much <br> uniform'],
             require_movement: false,
             step: 1,
             slider_start: 0,
@@ -214,10 +222,10 @@
         timeline.push(instructions);
         var slider_instructions = {
             type: jsPsychHtmlButtonResponse,
-            stimulus: `<div style="width:800px;"><p style="text-align:left">To move the slider, click and drag your cursor to the location of the scale where you would like to make your rating and then let go. When you let go of the slider, your response will be recorded and the next trial will begin. <br>
-            We are interested in your initial impressions of each image's uniformity, so please go with your first intuition. <br>
-            Before you begin the experiment, there will be four training trials for you to practice using the scale. <br>
-             When you are ready to start the training trials, please click "Continue".</p><br></div>`,
+            stimulus: `<div style="width:800px; margin-left=-100px;"><p style="text-align:center";>To move the slider, click and drag your cursor to the location of the scale where you would like to make your rating and then let go. When you let go of the slider, your response will be recorded and the next trial will begin. <br><br>
+            We are interested in your initial impressions of each image's uniformity, so please go with your first intuition. <br><br>
+            Before you begin the experiment, there will be four training trials for you to practice using the scale. <br><br>
+            When you are ready to start the training trials, please click "Continue".</p><br></div>`,
             choices: ['Continue']
         }
 
@@ -247,7 +255,7 @@
 
                             </div>
                         </div>`,
-                labels: ['Not at all', 'Very Much'],
+                labels: ['Not at all <br> uniform', 'Very much <br> uniform'],
                 // slider_width: 500,
                 require_movement: false,
                 step: 1,
@@ -325,7 +333,8 @@
 
         var practice_complete = {
             type: jsPsychHtmlButtonResponse,
-            stimulus: "<p>Great job! You've completed the practice trials. Now you will begin the main task.</p>",
+            stimulus: `<div style="width:800px; margin-top:-300px;"><p style="text-align:center; font-size:22px; line-height:25px;""> Great job! You've completed the practice trials.</div>
+                 <div style="width:800px; margin-top:-20px;"><p style="text-align:center"><br><br> In the following trials, you will be asked to rate images on their uniformity one-by-one. <br> You will be given an oprtunities to take breaks when you have completed 25%, 50% and 75% of the trials. <br><br> Please click continue to begin the main task.<br><br><br> </div>`,
             choices: ['Continue']
         };
         timeline.push(practice_complete);
@@ -341,17 +350,10 @@
 
         // Define break messages
         var break_messages = [
-            "Nice job! You have completed 25% of the experiment trials. Feel free to take a quick break, then click 'Continue' when you are ready proceed to the next round. <br> Remember your task is rating the uniformity of each texture.",
-            "Nice job! You have completed 50% of the experiment trials. Feel free to take a quick break, then click 'Continue' when you are ready proceed to the next round. <br> Remember your task is rating the uniformity of each texture.",
-            "Nice job! You have completed 75% of the experiment trials. Feel free to take a quick break, then click 'Continue' when you are ready proceed to the next round. <br> Remember your task is rating the uniformity of each texture."
+            "You have completed 25% of the trials. Please click 'Continue' when you are ready proceed.",
+            "You have completed 50% of the trials. Please click 'Continue' when you are ready proceed.",
+            "You have completed 75% of the trials. Please click 'Continue' when you are ready proceed.",
         ];
-
-        var block_break0 = {
-            type: jsPsychHtmlButtonResponse,
-            stimulus: `<div style="width:800px;"><p style="text-align:center">In the following trials, you will be asked to rate images on their uniformity one-by-one.<br> `,
-            choices: ['Continue'],
-        };
-        timeline.push(block_break0);
 
         for (j = 0; j < Object.keys(textures).length; j++) {
 
@@ -367,7 +369,7 @@
                                 <img src="${this_texture}" style= "width:200px"alt="img">
                             </div>
                         </div>`,
-                labels: ['Not at all uniform', 'Very uniform'],
+                labels: ['Not at all <br> uniform', 'Very much <br> uniform'],
                 slider_width: 500,
                 require_movement: false,
                 step: 1,
@@ -399,13 +401,19 @@
         }
 
         // Final message at the end of the experiment
-        var final_message = {
+        var debrief_script = {
             type: jsPsychHtmlButtonResponse,
-            stimulus: "<p>Great Job! You're done rating all textures!<br></br></p>",
+            stimulus: "<p>Great Job! You're done rating all textures!<br></br></p>" +
+                '<div style="width:800px">Great job! You have finished the experiment.' +
+                '<p> The goal of this study is to understand how people form associations between visual textures and concepts.</p>' +
+                '<p> To do this, we need to collect data on how people view the uniformity of textures. </p>' +
+                '<p> Please do not inform other potential participants of the hypotheses in our experiment' +
+                '<p> Credit for your participation will be appear on SONA in the next few days.' +
+                '<p> Thank you for participating! You may now close this window.</div>',
             choices: ['Next'],
         };
 
-        timeline.push(final_message);
+        timeline.push(debrief_script);
 
 
         const save_data = {
@@ -413,25 +421,23 @@
             action: "save",
             experiment_id: "yLSJhzw7E4El",
             filename: filename,
-            data_string: () => jsPsych.data.get().csv()
+            data_string: () => jsPsych.data.get().csv(),
+            on_load: () => {         // Add this line to make sure the data saves in the background
+                console.log("Data is being saved in the background.");
+            }
         };
 
         timeline.push(save_data);
 
         //spot for debrief
 
-        var debrief_script = {
+        var thank_you = {
             type: jsPsychHtmlKeyboardResponse,
-            stimulus: '<div style="width:800px">Great job! You have finished the experiment.' +
-                '<p> The goal of this study is to understand how people form associations between visual textures and concepts.</p>' +
-                '<p> To do this, we need to collect data on how people view the uniformity of textures. </p>' +
-                '<p> Please do not inform other potential participants of the hypotheses in our experiment' +
-                '<p> Credit for your participation will be appear on SONA in the next few days.' +
-                '<p> Thank you for participating! You may now close this window.</div>',
+            stimulus: '<div style="width:800px"> Thank you!',
             choices: ['NO_KEYS']
         }
 
-        timeline.push(debrief_script);
+        timeline.push(thank_you);
 
         timeline.push({
             type: jsPsychFullscreen,
