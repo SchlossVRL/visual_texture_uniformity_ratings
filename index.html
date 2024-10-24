@@ -166,7 +166,7 @@
         </div>
 
         <!-- First Row: Uniform Textures -->
-        <div style="width:1600px; text-align:left; font-size:24px; margin-top: 50px; margin-bottom: 10px;">
+        <div style="width:1200px; text-align:left; font-size:24px; margin-top: 50px; margin-bottom: 10px;">
             <div style="display: flex; justify-content: flex-start; align-items: center;">
                 <span style="width:45%; margin-left: 80px; margin-right: 20px;">
                     Some of the textures will appear very 'uniform,' which means they appear similar across the whole image. 
@@ -178,7 +178,7 @@
         </div>
 
         <!-- Second Row: Non-Uniform Textures -->
-        <div style="width:1600px; text-align:left; font-size:24px; margin-top: 50px; margin-bottom: 10px;">
+        <div style="width:1200px; text-align:left; font-size:24px; margin-top: 50px; margin-bottom: 10px;">
             <div style="display: flex; justify-content: flex-start; align-items: center;">
                 <span style="width:45%; margin-left: 80px; margin-right: 20px;">
                     Some of the textures will appear very 'non-uniform,' which means they look different in different parts of the image. 
@@ -198,16 +198,16 @@
         var instructions = {
             type: jsPsychHtmlSliderResponse,
             stimulus: `
-            <div style='text-align:left; margin-left=-100px; font-size:20px; line-height:25px; width: 1200px;'>
+            <div style='text-align:left; height: auto; margin-left=-100px; margin-bottom: -20px; font-size:20px; line-height:25px; width: 1200px;'>
                 <br>During this experiment, you will see a series of textures, one at a time, like the ones below. 
             </div>
                 <br>
                 <br>
-                <img src="anchoring_visual_textures.png" alt="img" style="max-width:900px">
+                <img src="anchoring_visual_textures.png" alt="img" style="max-width:700px; margin-left: -50px;">
             </div>
             <div style="clear: both;"></div>
             </div>
-                <div style='text-align:left; margin-left=-100px; font-size:20px; line-height:25px; width: 1200px;'>
+                <div style='text-align:left; margin-left=-100px; font-size:20px; line-height:25px; width: 1200px; margin-top: -50px;'>
                 <br> Your task is to rate how uniform the texture appears on a scale from 'not at all uniform' to 'very much uniform,' like the one below.
                 <br><br> So you know what 'very much uniform' and 'not at all uniform' means to you in the context of these textures, please think about which textures below you consider 'very much uniform,' and which textures below you consider 'not at all uniform.'
                 <br><br>When you see a texture during the experiment that you consider 'very much uniform', please rate it near the 'very much uniform' endpoint of the
@@ -233,12 +233,11 @@
             },
             slider_width: 500,
 
-        }
-            //removed } below; used to be };
-            ;
+        };
+
+        timeline.push(instructions);
 
         //instructions on how the slider may be moved
-        timeline.push(instructions);
         var slider_instructions = {
             type: jsPsychHtmlButtonResponse,
             stimulus: `<div style="width:1200px; margin-top:-150px;"><p style="text-align:center; font-size:24px;">To move the slider, click and drag your cursor to the location of the scale where you would like to make your rating and then let go. <br><br> When you let go of the slider, your response will be recorded and the next trial will begin. <br><br><br>
