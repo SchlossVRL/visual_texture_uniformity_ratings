@@ -436,12 +436,9 @@
         const save_data = {
             type: jsPsychPipe,
             action: "save",
-            experiment_id: "yLSJhzw7E4El",
+            experiment_id: "uiwSce8sNnbJ",
             filename: filename,
-            data_string: () => jsPsych.data.get().csv(),
-            on_load: () => {         // Add this line to make sure the data saves in the background
-                console.log("Data is being saved in the background.");
-            }
+            data_string: () => jsPsych.data.get().csv()
         };
 
         timeline.push(save_data);
