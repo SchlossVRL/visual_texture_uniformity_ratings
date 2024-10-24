@@ -131,7 +131,7 @@
             button_label: "Start Experiment",
         };
 
-        //timeline.push(consentSign);
+        timeline.push(consentSign);
 
         // Overview instructions of experiment
         var overview_instructions = {
@@ -153,7 +153,7 @@
             button_label: "Done",
             randomize_question_order: false
         }
-        //timeline.push(age_lang_demo);
+        timeline.push(age_lang_demo);
 
         var uniformity = {
             type: jsPsychHtmlButtonResponse,
@@ -418,6 +418,18 @@
             }
         }
 
+
+        const save_data = {
+            type: jsPsychPipe,
+            action: "save",
+            experiment_id: "uiwSce8sNnbJ",
+            filename: filename,
+            wait_message: 'Please wait a moment while the next page loads.',
+            data_string: () => jsPsych.data.get().csv()
+        };
+
+        timeline.push(save_data);
+
         // Final message at the end of the experiment
         var debrief_script = {
             type: jsPsychHtmlButtonResponse,
@@ -431,17 +443,6 @@
         };
 
         timeline.push(debrief_script);
-
-
-        const save_data = {
-            type: jsPsychPipe,
-            action: "save",
-            experiment_id: "uiwSce8sNnbJ",
-            filename: filename,
-            data_string: () => jsPsych.data.get().csv()
-        };
-
-        timeline.push(save_data);
 
         //spot for debrief
 
