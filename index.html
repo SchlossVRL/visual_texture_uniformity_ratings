@@ -38,14 +38,10 @@
         const filename = `${subject_id}.csv`;
 
 
-        /* // Function to get query parameters from URL
-        function getQueryStringParam(param) {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(param);
-        }
+        //SONA
 
         // Capture the participant ID
-        var participant_id = getQueryStringParam('participant_id'); */
+        let sona_id = jsPsych.data.urlVariables()['sona_id']
 
 
         // Set background color to gray //
@@ -454,7 +450,11 @@
             stimulus: `<div style="width:800px"> Thank you!
                 <br><br>Credit for your participation will appear on SONA in the next few days.
                 <br><br> Press any key to exit full screen and end the experiment.`,
-            choices: 'ALL_KEYS'
+            choices: 'ALL_KEYS',
+            on_finish: function () {
+                const sonaRedirectURL = `https://yourschool.sona-systems.com/webstudy_credit.aspx?experiment_id=[EXPERIMENT_ID]&credit_token=[CREDIT_TOKEN]&survey_code=${getSurveyCode()}`;
+                window.location.href = sonaRedirectURL;
+            }
         }
 
         timeline.push(thank_you);
@@ -464,20 +464,14 @@
             fullscreen_mode: false,
         })
 
-        /* const experiment_id = '123';  // Replace with your actual experiment ID
-        const credit_token = 'abc123'; // Replace with your actual credit token */
 
-
-        jsPsych.run(timeline);
-
-        /* // Attach an event to run when the experiment finishes
-        jsPsych.onFinish(() => {
-            // Sona completion URL
-            const sona_completion_url = `https://your-sonasystem.com/webstudy_credit.aspx?experiment_id=${experiment_id}&credit_token=${credit_token}&participant_id=${participant_id}`;
-
-            // Redirect to Sona to give participant credit
-            window.location.href = sona_completion_url;
-        }); */
+        jsPsych.run(timeline, {
+            on_finish: function () {
+                // Redirect to Sona's completion URL with the sona_id for credit
+                window.location.assign("https://yourschool.sona-systems.com/webstudy_credit.aspx?experiment_id=123&credit_token=4e48f9b638a&survey_code=" + sona_id);
+            }
+        }
+        );
 
 
     </script>
