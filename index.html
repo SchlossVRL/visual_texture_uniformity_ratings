@@ -356,22 +356,22 @@
 
 
 
+        //Define texture order for each block
+        var texture_order_1 = jsPsych.randomization.sampleWithoutReplacement(_.range(Object.keys(textures).length), Object.keys(textures).length);
+        var texture_order_2 = jsPsych.randomization.sampleWithoutReplacement(_.range(Object.keys(textures).length), Object.keys(textures).length);
 
-        var texture_order = jsPsych.randomization.sampleWithoutReplacement(_.range(Object.keys(textures).length), Object.keys(textures).length);
 
         // Define how many trials should be in each block (3 breaks, so divide by 4)
-        var trials_per_block = Math.floor(Object.keys(textures).length / 4);
+        var trials_per_block = Math.floor(Object.keys(textures).length / 2);
+
+        // Block 1
 
         // Define break messages
-        var break_messages = [
-            "You have completed 25% of the trials. Please click 'Continue' when you are ready proceed.",
-            "You have completed 50% of the trials. Please click 'Continue' when you are ready proceed.",
-            "You have completed 75% of the trials. Please click 'Continue' when you are ready proceed.",
-        ];
+        var break_message_1 = "You have completed 25% of the trials. Please click 'Continue' when you are ready proceed.";
 
         for (j = 0; j < Object.keys(textures).length; j++) {
 
-            this_texture = textures[texture_order[j]];
+            this_texture = textures[texture_order_1[j]];
             // Define concept based on current exemplar
             //var concept = affect_list[i];
             var rating_trial = {
@@ -402,15 +402,74 @@
             timeline.push(rating_trial);
 
 
-            // Insert breaks at 1/4, 2/4, and 3/4 of the trials
+            // Insert break halfway through the block 1 trials
             if (j > 0 && (j + 1) % trials_per_block === 0 && (j + 1) < Object.keys(textures).length) {
-                var break_index = (j + 1) / trials_per_block - 1; // Break index to get the correct message
-                var break_trial = {
+                var break_trial_1 = {
                     type: jsPsychHtmlButtonResponse,
-                    stimulus: `<p>${break_messages[break_index]}<br></br></p>`,
+                    stimulus: break_message_1,
                     choices: ['Continue'],
                 };
-                timeline.push(break_trial);
+                timeline.push(break_trial_1);
+            }
+        }
+
+        //Halfway - break 2
+
+        var break2 = {
+            type: jsPsychHtmlButtonResponse,
+            stimulus: "You have completed 50% of the trials. Please click 'Continue' when you are ready proceed.",
+            choices: ['Continue']
+        };
+
+        timeline.push(break2);
+
+        // Block 2
+
+        // Define break messages
+        var break_message_3 = "You have completed 75% of the trials. Please click 'Continue' when you are ready proceed.";
+
+        for (j = 0; j < Object.keys(textures).length; j++) {
+
+            this_texture = textures[texture_order_2[j]];
+            // Define concept based on current exemplar
+            //var concept = affect_list[i];
+            var rating_trial_check = {
+                type: jsPsychHtmlSliderResponse,
+                stimulus: `<div style="width:500px;">
+                                <p style="font-size:50px; font-weight:bold;"
+                                ></p>
+                                <div style="width:240px; margin: auto;">
+                                    <img src="${this_texture}" style= "width:200px"alt="img">
+                                </div>
+                            </div>`,
+                labels: ['Not at all <br> uniform', 'Very much <br> uniform'],
+                slider_width: 500,
+                require_movement: false,
+                step: 1,
+                slider_start: 0,
+                min: -200,
+                max: 200,
+                response_ends_trial: true,
+                post_trial_gap: 500,
+                data: {
+                    image_path: this_texture,
+                    //concept: concept
+                }
+
+            };
+
+            timeline.push(rating_trial_check);
+
+
+            // Insert break halfway through the block 2 trials
+            if (j > 0 && (j + 1) % trials_per_block === 0 && (j + 1) < Object.keys(textures).length) {
+                var break_index = (j + 1) / trials_per_block - 1; // Break index to get the correct message
+                var break_trial_3 = {
+                    type: jsPsychHtmlButtonResponse,
+                    stimulus: break_message_3,
+                    choices: ['Continue'],
+                };
+                timeline.push(break_trial_3);
             }
         }
 
@@ -449,7 +508,7 @@
             type: jsPsychHtmlKeyboardResponse,
             stimulus: `<div style="width:800px"> Thank you!
                 <br><br>Credit for your participation will appear on SONA in the next few days.
-                <br><br> Press any key to exit full screen and end the experiment.`,
+                <br><br> Press any key to end the experiment.`,
             choices: 'ALL_KEYS',
             on_finish: function () {
                 const sonaRedirectURL = `https://yourschool.sona-systems.com/webstudy_credit.aspx?experiment_id=[EXPERIMENT_ID]&credit_token=[CREDIT_TOKEN]&survey_code=${getSurveyCode()}`;
