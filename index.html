@@ -361,17 +361,17 @@
         var texture_order_2 = jsPsych.randomization.sampleWithoutReplacement(_.range(Object.keys(textures).length), Object.keys(textures).length);
 
 
-        // Define how many trials should be in each block (3 breaks, so divide by 4)
-        var trials_per_block = Math.floor(Object.keys(textures).length / 2);
+        // Define how many trials should be in each block
+        var trials_per_block = Object.keys(textures).length;
 
         // Block 1
 
         // Define break messages
         var break_message_1 = "You have completed 25% of the trials. Please click 'Continue' when you are ready proceed.";
 
-        for (j = 0; j < Object.keys(textures).length; j++) {
+        for (j = 0; j < texture_order_1.length; j++) {
 
-            this_texture = textures[texture_order_1[j]];
+            var this_texture = textures[texture_order_1[j]];
             // Define concept based on current exemplar
             //var concept = affect_list[i];
             var rating_trial = {
@@ -403,7 +403,7 @@
 
 
             // Insert break halfway through the block 1 trials
-            if (j > 0 && (j + 1) % trials_per_block === 0 && (j + 1) < Object.keys(textures).length) {
+            if (j === Math.floor(trials_per_block / 2) - 1) {
                 var break_trial_1 = {
                     type: jsPsychHtmlButtonResponse,
                     stimulus: break_message_1,
@@ -428,9 +428,9 @@
         // Define break messages
         var break_message_3 = "You have completed 75% of the trials. Please click 'Continue' when you are ready proceed.";
 
-        for (j = 0; j < Object.keys(textures).length; j++) {
+        for (j = 0; j < texture_order_2.length; j++) {
 
-            this_texture = textures[texture_order_2[j]];
+            var this_texture = textures[texture_order_2[j]];
             // Define concept based on current exemplar
             //var concept = affect_list[i];
             var rating_trial_check = {
@@ -462,8 +462,7 @@
 
 
             // Insert break halfway through the block 2 trials
-            if (j > 0 && (j + 1) % trials_per_block === 0 && (j + 1) < Object.keys(textures).length) {
-                var break_index = (j + 1) / trials_per_block - 1; // Break index to get the correct message
+            if (j === Math.floor(trials_per_block / 2) - 1) {
                 var break_trial_3 = {
                     type: jsPsychHtmlButtonResponse,
                     stimulus: break_message_3,
