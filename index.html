@@ -507,7 +507,7 @@
             type: jsPsychHtmlKeyboardResponse,
             stimulus: `<div style="width:800px"> Thank you!
                 <br><br>Credit for your participation will appear on SONA in the next few days.
-                <br><br> Press any key to end the experiment.`,
+                <br><br> You may press the 'esc' key to end the experiment and exit full screen.`,
             choices: 'ALL_KEYS',
             on_finish: function () {
                 const sonaRedirectURL = `https://yourschool.sona-systems.com/webstudy_credit.aspx?experiment_id=[EXPERIMENT_ID]&credit_token=[CREDIT_TOKEN]&survey_code=${getSurveyCode()}`;
