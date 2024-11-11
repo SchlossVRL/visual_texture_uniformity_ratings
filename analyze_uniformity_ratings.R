@@ -26,12 +26,23 @@ print(rating_differences)
 
 average_differences <- rating_differences %>% 
   group_by(image_path) %>% 
-  summarize(avg_rating_diff = mean(rating_diff, na.rm = TRUE), .groups = "drop") %>% 
+  summarize(avg_rating_diff = mean(rating_diff, na.rm = TRUE), .groups = "drop")
  
 
 print(average_differences)
 
+full_image_set <- average_differences %>%
+  select(image_path)
+  
+write.csv(full_image_set, "full_image_set.csv", row.names = FALSE)
 # Participant correlations -----
+
+# Calculate the within-subject correlations for each participant
+correlations <- rating_differences %>%
+  group_by(subject_id) %>%
+  summarize(correlation = cor(rating1, rating2, use = "complete.obs"), .groups = "drop")
+
+print(correlations)
 
 # Average Ratings ------
 ## Error and Confidence Interval
@@ -53,8 +64,36 @@ ci_data <- ci_data %>%
 
 # Select subset
 # Create a new data frame with ci_lower above 0
+#subset_images_data <- ci_data %>%
+  #filter(ci_lower > 0)
 subset_images_data <- ci_data %>%
-  filter(ci_lower > 0)
+  filter(mean_rating > 0)
+
+#bars above 0
+
+ratings <- data %>%
+  group_by(image_path) %>%
+  summarise(
+    mean_rating = mean(response, na.rm = TRUE),
+    .groups = "drop"  # Drop grouping after summarize
+  )
+
+subset_images_data_bars <- ratings %>%
+  filter(mean_rating > 0)
+
+export_subset <- subset_images_data %>% 
+  mutate(image_path = str_remove(image_path, "images/")) %>% 
+  select(image_path) 
+
+write.csv(export_subset, "uniformity_ratings_subset.csv", row.names = FALSE)
+
+#prep for new triplets study
+export_subset_paths <- subset_images_data_bars %>% 
+  mutate(image_path = str_remove(image_path, "images/"),
+         image_path = paste0("materials/imgs/", image_path)) %>% 
+  select(image_path) 
+
+write.csv(export_subset_paths, "uniformity_ratings_subset_paths.csv", row.names = FALSE)
 
 #Plotting ----------------------------------------------------------------------
 # Plotting Uniformity Ratings
@@ -71,6 +110,18 @@ ggplot(ci_data, aes(x = reorder(image_path, -mean_rating), y = mean_rating)) +
     axis.text.x = element_blank(),  # Remove x-axis text labels
     axis.ticks.x = element_blank()   # Remove x-axis ticks
   )
+
+#check beans
+ggplot(ci_data, aes(x = reorder(image_path, -mean_rating), y = mean_rating)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width = 0.2, color = "darkblue") +
+  labs(
+    title = "Average Uniformity Ratings by Image",
+    x = "Image",
+    y = "Average Uniformity Rating"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 # Plotting Subset Uniformity Ratings
 # Create a new column for the position of the images
@@ -94,6 +145,26 @@ ggplot(subset_images_data, aes(x = reorder(image_path, -mean_rating), y = mean_r
     axis.ticks.x = element_blank()   # Remove x-axis ticks
   )
 
+#full ratings dist with images
+ci_data <- ci_data %>% 
+  mutate(
+    position_zero = 0
+  )
+ci_data$image_position <- ci_data$position_zero - 200
+ggplot(ci_data, aes(x = reorder(image_path, -mean_rating), y = mean_rating)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width = 0.2, color = "darkblue") +
+  geom_image(aes(image = image_path, y = image_position), size = 0.1, by = "width") +
+  labs(
+    title = "Average Uniformity Ratings by Image",
+    x = "Image",
+    y = "Average Uniformity Rating"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_blank(),  # Remove x-axis text labels
+    axis.ticks.x = element_blank()   # Remove x-axis ticks
+  )
 
 
 # Plotting average differences
@@ -143,7 +214,7 @@ display_images <- function(image_paths) {
 }
 
 # Call the function with the ordered image paths
-display_images(ordered_data$image_path)
+display_images(subset_images_data$image_path)
 
 
 #cronbach's alpha
