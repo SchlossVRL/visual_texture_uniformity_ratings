@@ -62,6 +62,26 @@ print(ci_data)
 ci_data <- ci_data %>% 
   arrange(desc(mean_rating))
 
+#error bars
+# Calculate mean and standard error for each image_path
+error_data <- data %>%
+  group_by(image_path) %>%
+  summarise(
+    mean_rating = mean(response, na.rm = TRUE),
+    se = sd(response, na.rm = TRUE) / sqrt(n()),  # Standard error of the mean
+    error_lower = mean_rating - se,               # Lower bound for error bars
+    error_upper = mean_rating + se,               # Upper bound for error bars
+    .groups = "drop"  # Drop grouping after summarize
+  )
+
+# View the error bars
+print(error_data)
+
+# Arrange data by mean rating in descending order
+error_data <- error_data %>% 
+  arrange(desc(mean_rating))
+
+
 # Select subset
 # Create a new data frame with ci_lower above 0
 #subset_images_data <- ci_data %>%
@@ -154,6 +174,27 @@ ci_data$image_position <- ci_data$position_zero - 200
 ggplot(ci_data, aes(x = reorder(image_path, -mean_rating), y = mean_rating)) +
   geom_bar(stat = "identity", fill = "skyblue") +
   geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width = 0.2, color = "darkblue") +
+  geom_image(aes(image = image_path, y = image_position), size = 0.1, by = "width") +
+  labs(
+    title = "Average Uniformity Ratings by Image",
+    x = "Image",
+    y = "Average Uniformity Rating"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_blank(),  # Remove x-axis text labels
+    axis.ticks.x = element_blank()   # Remove x-axis ticks
+  )
+
+#full ratings dist with images - error bars
+error_data <- error_data %>% 
+  mutate(
+    position_zero = 0
+  )
+error_data$image_position <- error_data$position_zero - 200
+ggplot(error_data, aes(x = reorder(image_path, -mean_rating), y = mean_rating)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  geom_errorbar(aes(ymin = error_lower, ymax = error_upper), width = 0.2, color = "darkblue") +
   geom_image(aes(image = image_path, y = image_position), size = 0.1, by = "width") +
   labs(
     title = "Average Uniformity Ratings by Image",
